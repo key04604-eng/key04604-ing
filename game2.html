@@ -481,7 +481,7 @@
       </section>
 
       <p class="footer-note">
-        Firebase Modular SDK 版。建議上傳 GitHub Pages 後，用兩台裝置測試連線。
+        Firebase Modular SDK 版｜join fix v2。建議上傳 GitHub Pages 後，用兩台裝置測試連線。
       </p>
     </section>
   </main>
@@ -688,49 +688,39 @@
       try {
         const targetRoomRef = ref(db, "rooms/" + code);
 
-        const result = await runTransaction(
-          targetRoomRef,
-          (current) => {
-            if (!current) return;
+        // 先讀取雲端房間資料，避免 transaction 第一次拿到 null 時中止。
+        const snapshot = await get(targetRoomRef);
 
-            if (current.status !== "waiting") {
-              return;
-            }
-
-            current.players = current.players || {};
-
-            if (Object.keys(current.players).length >= 3) {
-              return;
-            }
-
-            current.players[playerId] = makePlayer(nickname);
-
-            return current;
-          }
-        );
-
-        if (!result.committed) {
-          const snapshot = await get(targetRoomRef);
-          const room = snapshot.val();
-
-          if (!room) {
-            throw new Error("找不到這個房間。");
-          }
-
-          if (room.status !== "waiting") {
-            throw new Error("這個房間已開始遊戲，暫時不能加入。");
-          }
-
-          const playerCount = Object.keys(room.players || {}).length;
-
-          if (playerCount >= 3) {
-            throw new Error("這個房間已滿，最多 3 人。");
-          }
-
-          throw new Error("加入房間失敗，請再試一次。");
+        if (!snapshot.exists()) {
+          throw new Error("找不到這個房間，請確認房號。");
         }
 
+        const room = snapshot.val();
+
+        if (room.status !== "waiting") {
+          throw new Error("這個房間已開始遊戲，暫時不能加入。");
+        }
+
+        const players = room.players || {};
+        const playerCount = Object.keys(players).length;
+
+        if (playerCount >= 3) {
+          throw new Error("這個房間已滿，最多 3 人。");
+        }
+
+        // 只新增自己的玩家節點，不覆蓋整個房間。
+        const myPlayerRef = ref(
+          db,
+          `rooms/${code}/players/${playerId}`
+        );
+
+        await set(
+          myPlayerRef,
+          makePlayer(nickname)
+        );
+
         await enterRoom(code, targetRoomRef);
+
       } catch (error) {
         console.error(error);
 
