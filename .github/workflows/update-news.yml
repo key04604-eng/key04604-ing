@@ -1,0 +1,134 @@
+name: Update news
+
+on:
+  schedule:
+    # GitHub Actions cron 使用 UTC；00:00 UTC = 台灣時間 08:00
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Google News RSS and create news.json
+        run: |
+          python - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from datetime import datetime, timezone
+          from email.utils import parsedate_to_datetime
+          from urllib.request import Request, urlopen
+
+          RSS_URL = "https://news.google.com/rss/search?q=台灣設計研究院&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+          OUTPUT = "news.json"
+          MAX_ITEMS = 12
+
+          request = Request(
+              RSS_URL,
+              headers={
+                  "User-Agent": "Mozilla/5.0 (GitHub Actions news updater)"
+              },
+          )
+
+          with urlopen(request, timeout=30) as response:
+              xml_data = response.read()
+
+          root = ET.fromstring(xml_data)
+          channel = root.find("channel")
+
+          if channel is None:
+              raise RuntimeError("RSS channel not found")
+
+          news = []
+          seen = set()
+
+          for node in channel.findall("item"):
+              title = (node.findtext("title") or "").strip()
+              link = (node.findtext("link") or "").strip()
+              source = (node.findtext("source") or "").strip()
+              pub_date_raw = (node.findtext("pubDate") or "").strip()
+
+              if not title or not link:
+                  continue
+
+              key = (title, link)
+
+              if key in seen:
+                  continue
+
+              seen.add(key)
+
+              published_at = ""
+
+              if pub_date_raw:
+                  try:
+                      dt = parsedate_to_datetime(pub_date_raw)
+
+                      if dt.tzinfo is None:
+                          dt = dt.replace(tzinfo=timezone.utc)
+
+                      published_at = (
+                          dt.astimezone(timezone.utc)
+                          .isoformat()
+                          .replace("+00:00", "Z")
+                      )
+
+                  except (TypeError, ValueError):
+                      published_at = pub_date_raw
+
+              news.append({
+                  "title": title,
+                  "link": link,
+                  "source": source,
+                  "published_at": published_at,
+              })
+
+              if len(news) >= MAX_ITEMS:
+                  break
+
+          payload = {
+              "updated_at": (
+                  datetime.now(timezone.utc)
+                  .isoformat()
+                  .replace("+00:00", "Z")
+              ),
+              "items": news,
+          }
+
+          with open(OUTPUT, "w", encoding="utf-8") as f:
+              json.dump(
+                  payload,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+              f.write("\n")
+
+          print(f"Wrote {len(news)} items to {OUTPUT}")
+          PY
+
+      - name: Commit news.json if changed
+        run: |
+          if [ -z "$(git status --porcelain -- news.json)" ]; then
+            echo "news.json has no changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add news.json
+          git commit -m "chore: update news"
+          git push
