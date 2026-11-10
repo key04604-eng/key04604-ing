@@ -31,7 +31,7 @@ jobs:
           from email.utils import parsedate_to_datetime
           from urllib.request import Request, urlopen
 
-          RSS_URL = "https://news.google.com/rss/search?q=台灣設計研究院&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+          RSS_URL = "https://news.google.com/rss/search?q=%E5%8F%B0%E7%81%A3%E8%A8%AD%E8%A8%88%E7%A0%94%E7%A9%B6%E9%99%A2&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
           OUTPUT = "news.json"
           MAX_ITEMS = 12
 
