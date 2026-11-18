@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="林鈺晴的個人首頁，關注服務設計、與資訊設計。" />
-  <title>林鈺晴｜個人首頁</title>
+  <meta name="description" content="以社工經驗探討資訊設計與社會議題作品" />
+  <title>林鈺晴｜數位媒體設計研究生</title>
+
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="canonical" href="https://key04604-eng.github.io/key04604-ing/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta property="og:site_name" content="林鈺晴｜數位媒體設計研究生" />
+  <meta property="og:title" content="林鈺晴｜數位媒體設計研究生" />
+  <meta property="og:description" content="以社工經驗探討資訊設計與社會議題作品" />
+  <meta property="og:url" content="https://key04604-eng.github.io/key04604-ing/" />
+  <meta property="og:image" content="https://key04604-eng.github.io/key04604-ing/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="林鈺晴個人網站預覽圖" />
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRJ8DV18BV"></script>
@@ -463,6 +478,40 @@
       grid-column: 1 / -1;
       min-height: auto;
       color: rgba(47,45,42,.72);
+    }
+
+    .share-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .share-btn {
+      appearance: none;
+      border: 1px solid rgba(47,45,42,.18);
+      background: var(--paper);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      padding: 9px 13px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 3px 4px 0 rgba(47,45,42,.08);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 2px 3px 0 rgba(47,45,42,.1);
+    }
+
+    .share-status {
+      width: 100%;
+      min-height: 1.4em;
+      font-size: .82rem;
+      opacity: .68;
     }
 
     .contact-strip {
@@ -942,11 +991,17 @@
           <div class="eyebrow">Personal Profile</div>
           <h1>林鈺晴</h1>
           <div class="scribble" aria-hidden="true"></div>
-          <p class="identity">大同大學數位媒體設計研究所碩士一年級，從社會工作經驗出發，持續探索設計與社會服務之間的連結。</p>
+          <p class="identity">以社工經驗探討資訊設計與社會議題作品</p>
           <div class="hero-actions">
             <a class="cta" href="mailto:key04604@gmail.com">聯絡我</a>
             <a class="cta game-cta" href="game.html">玩我的小遊戲</a>
             <a class="cta rps-cta" href="game2.html">玩連線猜拳</a>
+          </div>
+          <div class="share-actions" aria-label="分享網站">
+            <a class="share-btn" id="shareLine" href="#" target="_blank" rel="noopener noreferrer">LINE 分享</a>
+            <a class="share-btn" id="shareFacebook" href="#" target="_blank" rel="noopener noreferrer">Facebook 分享</a>
+            <button class="share-btn" id="shareSystem" type="button">分享網站</button>
+            <span class="share-status" id="shareStatus" aria-live="polite"></span>
           </div>
           <span class="float-doodle d1">↗</span>
           <span class="float-doodle d2">✎</span>
@@ -1036,6 +1091,13 @@
     const mobileNav = document.querySelector('#mobileNav');
     const mobileQuery = window.matchMedia('(max-width: 680px)');
     const newsGrid = document.querySelector('#newsGrid');
+    const shareLine = document.querySelector('#shareLine');
+    const shareFacebook = document.querySelector('#shareFacebook');
+    const shareSystem = document.querySelector('#shareSystem');
+    const shareStatus = document.querySelector('#shareStatus');
+    const siteUrl = 'https://key04604-eng.github.io/key04604-ing/';
+    const siteTitle = '林鈺晴｜數位媒體設計研究生';
+    const siteDescription = '以社工經驗探討資訊設計與社會議題作品';
 
     function formatNewsDate(value) {
       if (!value) return '';
@@ -1116,6 +1178,50 @@
         failed.textContent = '最新消息暫時無法載入，請稍後再試。';
         newsGrid.appendChild(failed);
       }
+    }
+
+    if (shareLine) {
+      shareLine.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(siteUrl)}`;
+    }
+
+    if (shareFacebook) {
+      shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}`;
+    }
+
+    async function copySiteUrl() {
+      try {
+        await navigator.clipboard.writeText(siteUrl);
+      } catch (error) {
+        const input = document.createElement('textarea');
+        input.value = siteUrl;
+        input.setAttribute('readonly', '');
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+      }
+      if (shareStatus) shareStatus.textContent = '網址已複製！';
+    }
+
+    if (shareSystem) {
+      shareSystem.addEventListener('click', async () => {
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: siteTitle,
+              text: siteDescription,
+              url: siteUrl
+            });
+            if (shareStatus) shareStatus.textContent = '';
+          } catch (error) {
+            if (error.name !== 'AbortError') await copySiteUrl();
+          }
+        } else {
+          await copySiteUrl();
+        }
+      });
     }
 
     loadNews();
