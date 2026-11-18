@@ -480,6 +480,76 @@
       color: rgba(47,45,42,.72);
     }
 
+
+    .weather-mini-wrap {
+      padding: 0 0 8px;
+    }
+
+    .weather-mini-card {
+      width: min(430px, 100%);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 20px 22px;
+      background: var(--paper);
+      border: 1px solid rgba(47,45,42,.15);
+      box-shadow: 6px 8px 0 rgba(127,134,101,.14);
+      color: var(--ink);
+      text-decoration: none;
+      transform: rotate(-.35deg);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .weather-mini-card:hover {
+      transform: translateY(-3px) rotate(.15deg);
+      box-shadow: 4px 6px 0 rgba(127,134,101,.18);
+    }
+
+    .weather-mini-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      background: rgba(124,143,151,.14);
+      border-radius: 50%;
+      font-size: 1.9rem;
+    }
+
+    .weather-mini-kicker {
+      margin: 0 0 2px;
+      font-size: .78rem;
+      opacity: .62;
+    }
+
+    .weather-mini-main {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+    }
+
+    .weather-mini-temp {
+      font-size: 1.8rem;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .weather-mini-condition {
+      font-weight: 700;
+    }
+
+    .weather-mini-rain {
+      margin-top: 4px;
+      font-size: .86rem;
+      opacity: .74;
+    }
+
+    .weather-mini-arrow {
+      font-size: 1.35rem;
+      opacity: .55;
+    }
+
     .share-actions {
       display: flex;
       align-items: center;
@@ -656,6 +726,29 @@
     }
 
     @media (max-width: 680px) {
+
+      .weather-mini-card {
+        width: 100%;
+        grid-template-columns: auto 1fr auto;
+        padding: 17px 18px;
+        transform: none;
+      }
+
+      .weather-mini-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .weather-mini-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.6rem;
+      }
+
+      .weather-mini-temp {
+        font-size: 1.55rem;
+      }
+
+
       .news-grid {
         grid-template-columns: 1fr;
       }
@@ -1017,6 +1110,22 @@
         </div>
       </section>
 
+
+      <section class="wrap weather-mini-wrap" aria-label="今日天氣">
+        <a class="weather-mini-card" href="weather.html" aria-label="查看完整天氣預報">
+          <div class="weather-mini-icon" id="weatherMiniIcon" aria-hidden="true">☀️</div>
+          <div>
+            <p class="weather-mini-kicker">台北・今日天氣</p>
+            <div class="weather-mini-main">
+              <strong class="weather-mini-temp" id="weatherMiniTemp">--°C</strong>
+              <span class="weather-mini-condition" id="weatherMiniCondition">讀取中⋯</span>
+            </div>
+            <div class="weather-mini-rain" id="weatherMiniRain">正在取得降雨資訊</div>
+          </div>
+          <span class="weather-mini-arrow" aria-hidden="true">→</span>
+        </a>
+      </section>
+
       <section class="wrap" id="news">
         <h2 class="section-title">最新消息</h2>
         <p class="news-intro">自動彙整「台灣設計研究院」相關 Google 新聞，每日早上更新。</p>
@@ -1091,6 +1200,10 @@
     const mobileNav = document.querySelector('#mobileNav');
     const mobileQuery = window.matchMedia('(max-width: 680px)');
     const newsGrid = document.querySelector('#newsGrid');
+    const weatherMiniTemp = document.querySelector('#weatherMiniTemp');
+    const weatherMiniCondition = document.querySelector('#weatherMiniCondition');
+    const weatherMiniRain = document.querySelector('#weatherMiniRain');
+    const weatherMiniIcon = document.querySelector('#weatherMiniIcon');
     const shareLine = document.querySelector('#shareLine');
     const shareFacebook = document.querySelector('#shareFacebook');
     const shareSystem = document.querySelector('#shareSystem');
@@ -1098,6 +1211,56 @@
     const siteUrl = 'https://key04604-eng.github.io/key04604-ing/';
     const siteTitle = '林鈺晴｜數位媒體設計研究生';
     const siteDescription = '以社工經驗探討資訊設計與社會議題作品';
+
+
+    function getWeatherLabel(code) {
+      if (code === 0) return ['晴朗', '☀️'];
+      if ([1, 2].includes(code)) return ['晴時多雲', '🌤️'];
+      if (code === 3) return ['多雲', '☁️'];
+      if ([45, 48].includes(code)) return ['有霧', '🌫️'];
+      if ([51, 53, 55, 56, 57].includes(code)) return ['毛毛雨', '🌦️'];
+      if ([61, 63, 65, 66, 67].includes(code)) return ['下雨', '🌧️'];
+      if ([71, 73, 75, 77].includes(code)) return ['降雪', '🌨️'];
+      if ([80, 81, 82].includes(code)) return ['陣雨', '🌧️'];
+      if ([85, 86].includes(code)) return ['陣雪', '🌨️'];
+      if ([95, 96, 99].includes(code)) return ['雷雨', '⛈️'];
+      return ['天氣變化', '🌤️'];
+    }
+
+    async function loadWeatherMini() {
+      if (!weatherMiniTemp || !weatherMiniCondition || !weatherMiniRain) return;
+
+      const api = 'https://api.open-meteo.com/v1/forecast?latitude=25.0330&longitude=121.5654&current=temperature_2m,weather_code&daily=precipitation_probability_max&timezone=Asia%2FTaipei&forecast_days=1';
+
+      try {
+        const response = await fetch(api, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        const temperature = Math.round(data.current?.temperature_2m);
+        const code = Number(data.current?.weather_code);
+        const rainChance = Number(data.daily?.precipitation_probability_max?.[0]);
+        const [label, icon] = getWeatherLabel(code);
+
+        weatherMiniTemp.textContent = Number.isFinite(temperature) ? `${temperature}°C` : '--°C';
+        weatherMiniCondition.textContent = label;
+        if (weatherMiniIcon) weatherMiniIcon.textContent = icon;
+
+        if (Number.isFinite(rainChance)) {
+          weatherMiniRain.textContent = rainChance >= 50
+            ? `今日降雨機率 ${rainChance}%・記得留意雨勢`
+            : `今日降雨機率 ${rainChance}%・下雨機會較低`;
+        } else {
+          weatherMiniRain.textContent = '點開查看完整天氣預報';
+        }
+      } catch (error) {
+        console.error('今日天氣載入失敗：', error);
+        weatherMiniCondition.textContent = '暫時無法取得';
+        weatherMiniRain.textContent = '點開仍可查看完整天氣頁面';
+        if (weatherMiniIcon) weatherMiniIcon.textContent = '🌤️';
+      }
+    }
+
 
     function formatNewsDate(value) {
       if (!value) return '';
@@ -1224,6 +1387,7 @@
       });
     }
 
+    loadWeatherMini();
     loadNews();
 
     function closeMenu() {
