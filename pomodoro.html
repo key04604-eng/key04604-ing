@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>桌面蕃茄鐘｜林鈺晴</title>
+  <meta name="description" content="可自訂類別、任務與時間，並統計每週專注時數與類別分配的桌面蕃茄鐘工具。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="canonical" href="https://key04604-eng.github.io/key04604-ing/pomodoro.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta property="og:site_name" content="林鈺晴｜個人工具" />
+  <meta property="og:title" content="桌面蕃茄鐘｜林鈺晴" />
+  <meta property="og:description" content="自訂類別、任務與時間，記錄每週專注時數與類別分配。" />
+  <meta property="og:url" content="https://key04604-eng.github.io/key04604-ing/pomodoro.html" />
+  <meta property="og:image" content="https://key04604-eng.github.io/key04604-ing/og.jpg" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRJ8DV18BV"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-DRJ8DV18BV');</script>
+  <style>
+    :root{--cream:#f4efe4;--paper:#fbf7ee;--ink:#2f2d2a;--brick:#a86252;--blue:#7c8f97;--olive:#7f8665;--note:#e4d3a1;--line:rgba(47,45,42,.16)}
+    *{box-sizing:border-box}body{margin:0;font-family:"PingFang TC","Noto Sans TC",sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 10%,rgba(184,142,112,.08),transparent 26%),radial-gradient(circle at 85% 18%,rgba(124,143,151,.10),transparent 24%),var(--cream);min-height:100vh}.wrap{width:min(1180px,calc(100% - 32px));margin:auto}header{padding:24px 0}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-weight:800;text-decoration:none;border-bottom:2px solid var(--ink)}.home{background:var(--paper);border:1px solid var(--line);padding:10px 14px;text-decoration:none;font-weight:700;box-shadow:3px 4px 0 rgba(47,45,42,.08)}main{padding:10px 0 54px}h1{font-size:clamp(2.4rem,5vw,4.2rem);margin:0;line-height:1}.sub{color:rgba(47,45,42,.65);margin:10px 0 28px}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}.panel,.stat{background:var(--paper);border:1px solid var(--line);box-shadow:8px 10px 0 rgba(47,45,42,.08);padding:24px}.timer{font-size:clamp(4.2rem,10vw,7.4rem);font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums;margin:8px 0 16px}.eyebrow{display:inline-block;background:var(--note);padding:5px 10px;font-size:.85rem;font-weight:700}.status{min-height:1.5em;color:rgba(47,45,42,.65);margin-bottom:18px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field label{display:block;font-size:.84rem;font-weight:700;margin-bottom:6px}.field input{width:100%;min-height:46px;border:1px solid rgba(47,45,42,.22);background:#fffdf7;padding:10px 12px;font:inherit}.quick,.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.chip,button{font:inherit;font-weight:700;cursor:pointer}.chip{border:1px solid var(--line);background:var(--paper);padding:7px 11px}.chip.active{background:var(--olive);color:#fff}.actions button{border:0;min-height:46px;padding:11px 16px}.primary{background:var(--brick);color:#fff;box-shadow:4px 5px 0 #70463c}.secondary{background:var(--blue);color:#fff;box-shadow:4px 5px 0 #53676e}.ghost{background:#eee7da;color:var(--ink);border:1px solid var(--line)!important}.stats{display:grid;gap:18px}.stat h2,.week h2,.records h2{margin:0 0 14px}.big{font-size:2rem;font-weight:800}.muted{font-size:.88rem;color:rgba(47,45,42,.62)}.bars{display:grid;gap:10px}.barrow{display:grid;grid-template-columns:72px 1fr 74px;gap:10px;align-items:center;font-size:.88rem}.track{height:12px;background:#ece4d7}.fill{height:100%;background:var(--olive)}.week,.records{margin-top:28px}.weekgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}.day{background:var(--paper);border:1px solid var(--line);padding:14px 12px;min-height:110px}.day strong{display:block;margin-bottom:6px}.daytime{font-size:1.15rem;font-weight:800;margin-top:6px}.record{display:grid;grid-template-columns:90px 1fr auto auto;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:12px 4px}.badge{background:#e7dbb4;padding:4px 8px;font-size:.8rem;font-weight:700;width:max-content}.rtitle{font-weight:700}.delete{background:transparent;border:1px solid var(--line)!important;color:rgba(47,45,42,.55);min-height:34px!important;padding:6px 9px!important;font-size:.78rem}.note{margin-top:16px;background:#e7dbb4;padding:14px 16px;font-size:.88rem}.empty{color:rgba(47,45,42,.55);padding:12px 0}@media(max-width:860px){.layout{grid-template-columns:1fr}.weekgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.wrap{width:min(100% - 20px,1180px)}.grid,.weekgrid{grid-template-columns:1fr}.record{grid-template-columns:72px 1fr}.panel,.stat{padding:18px}.timer{font-size:4rem}}
+  </style>
+</head>
+<body>
+<header class="wrap"><div class="topbar"><a class="brand" href="index.html">林鈺晴</a><a class="home" href="index.html">← 回首頁</a></div></header>
+<main class="wrap">
+  <h1>桌面蕃茄鐘</h1><p class="sub">記錄你把時間花在哪裡，而不只是倒數 25 分鐘。</p>
+  <div class="layout">
+    <section class="panel">
+      <span class="eyebrow">FOCUS TIMER</span>
+      <div class="timer" id="timer">25:00</div><div class="status" id="status" aria-live="polite">尚未開始</div>
+      <div class="grid">
+        <div class="field"><label for="category">類別</label><input id="category" list="cats" value="設計" placeholder="工作、設計、生活、讀書"><datalist id="cats"><option value="工作"><option value="設計"><option value="生活"><option value="讀書"></datalist></div>
+        <div class="field"><label for="task">執行名稱</label><input id="task" placeholder="例如：作品集排版"></div>
+        <div class="field"><label for="start">起始時間</label><input id="start" type="time"></div>
+        <div class="field"><label for="end">結束時間</label><input id="end" type="time"></div>
+      </div>
+      <div class="quick"><button class="chip active" data-min="25">25 分</button><button class="chip" data-min="40">40 分</button><button class="chip" data-min="50">50 分</button><button class="chip" data-min="90">90 分</button></div>
+      <div class="actions"><button class="primary" id="startBtn">開始</button><button class="secondary" id="pauseBtn">暫停</button><button class="ghost" id="finishBtn">完成並記錄</button><button class="ghost" id="resetBtn">重設</button></div>
+      <div class="note">可使用倒數，也可直接調整起訖時間後按「完成並記錄」。紀錄會保存在目前瀏覽器。</div>
+    </section>
+    <aside class="stats">
+      <section class="stat"><h2>本週總覽</h2><div class="big" id="weekTotal">0 分</div><div class="muted" id="weekRange">—</div></section>
+      <section class="stat"><h2>各類別花費時間</h2><div class="bars" id="bars"><div class="empty">還沒有紀錄。</div></div></section>
+    </aside>
+  </div>
+  <section class="week"><h2>當週總覽表</h2><div class="weekgrid" id="weekGrid"></div></section>
+  <section class="records"><h2>本週紀錄</h2><div id="records"></div></section>
+</main>
+<script>
+(()=>{
+  const K='ching-pomodoro-records-v2';
+  const timer=document.getElementById('timer');
+  const status=document.getElementById('status');
+  const category=document.getElementById('category');
+  const task=document.getElementById('task');
+  const start=document.getElementById('start');
+  const end=document.getElementById('end');
+  const weekTotal=document.getElementById('weekTotal');
+  const weekRange=document.getElementById('weekRange');
+  const bars=document.getElementById('bars');
+  const weekGrid=document.getElementById('weekGrid');
+  const recordsBox=document.getElementById('records');
+  const chips=[...document.querySelectorAll('.chip')];
+
+  let mins=25;
+  let left=1500;
+  let id=null;
+  let running=false;
+  let started=null;
+  let segmentStartedAt=null;
+  let elapsedMs=0;
+
+  const pad=n=>String(n).padStart(2,'0');
+  const tv=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+  const dur=m=>{
+    const totalSeconds=Math.max(0,Math.round(Number(m||0)*60));
+    const h=Math.floor(totalSeconds/3600);
+    const mm=Math.floor((totalSeconds%3600)/60);
+    const ss=totalSeconds%60;
+    if(h) return ss?`${h} 小時 ${mm} 分 ${ss} 秒`:`${h} 小時 ${mm} 分`;
+    if(mm) return ss?`${mm} 分 ${ss} 秒`:`${mm} 分`;
+    return `${ss} 秒`;
+  };
+
+  const draw=()=>{
+    timer.textContent=`${pad(Math.floor(left/60))}:${pad(left%60)}`;
+  };
+
+  const load=()=>{
+    try{
+      const current=JSON.parse(localStorage.getItem(K)||'null');
+      if(Array.isArray(current)) return current;
+      const old=JSON.parse(localStorage.getItem('ching-pomodoro-records-v1')||'[]');
+      if(Array.isArray(old)){
+        localStorage.setItem(K,JSON.stringify(old));
+        return old;
+      }
+      return [];
+    }catch{return[]}
+  };
+
+  const save=a=>localStorage.setItem(K,JSON.stringify(a));
+
+  const bounds=()=>{
+    let d=new Date(),day=d.getDay(),diff=day===0?-6:1-day;
+    let s=new Date(d.getFullYear(),d.getMonth(),d.getDate()+diff);
+    s.setHours(0,0,0,0);
+    let e=new Date(s);e.setDate(s.getDate()+7);
+    return[s,e];
+  };
+
+  const inWeek=iso=>{
+    let[s,e]=bounds(),d=new Date(iso);
+    return d>=s&&d<e;
+  };
+
+  const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+  function startTimer(){
+    if(running)return;
+    if(!task.value.trim()){
+      task.focus();
+      status.textContent='請先輸入執行名稱。';
+      return;
+    }
+
+    const now=new Date();
+    if(!started){
+      started=now;
+      start.value=tv(started);
+      end.value='';
+      elapsedMs=0;
+    }
+
+    segmentStartedAt=Date.now();
+    running=true;
+    status.textContent='專注中…';
+
+    id=setInterval(()=>{
+      left--;
+      draw();
+      if(left<=0){
+        clearInterval(id);
+        id=null;
+        if(segmentStartedAt){
+          elapsedMs+=Date.now()-segmentStartedAt;
+          segmentStartedAt=null;
+        }
+        running=false;
+        left=0;
+        draw();
+        end.value=tv(new Date());
+        status.textContent='時間到！可以完成並記錄。';
+      }
+    },1000);
+  }
+
+  function pause(){
+    if(!running)return;
+    clearInterval(id);
+    id=null;
+    if(segmentStartedAt){
+      elapsedMs+=Date.now()-segmentStartedAt;
+      segmentStartedAt=null;
+    }
+    running=false;
+    status.textContent=`已暫停・實際執行 ${dur(elapsedMs/60000)}`;
+  }
+
+  function reset(){
+    if(id)clearInterval(id);
+    id=null;
+    running=false;
+    started=null;
+    segmentStartedAt=null;
+    elapsedMs=0;
+    left=mins*60;
+    start.value='';
+    end.value='';
+    draw();
+    status.textContent='尚未開始';
+  }
+
+  function manual(){
+    if(!start.value||!end.value)return null;
+    let[a,b]=start.value.split(':').map(Number),[c,d]=end.value.split(':').map(Number);
+    let x=a*60+b,y=c*60+d;
+    if(y<x)y+=1440;
+    return y-x;
+  }
+
+  function finish(){
+    const finishTime=new Date();
+
+    if(id)clearInterval(id);
+    id=null;
+
+    if(running&&segmentStartedAt){
+      elapsedMs+=Date.now()-segmentStartedAt;
+      segmentStartedAt=null;
+    }
+    running=false;
+
+    if(!task.value.trim()){
+      task.focus();
+      status.textContent='請先輸入執行名稱。';
+      return;
+    }
+
+    let durationMinutes;
+    let actualEnd;
+
+    // 有手動填寫結束時間時，以手動起訖時間為準；否則採實際計時時間。
+    if(end.value){
+      durationMinutes=manual();
+      actualEnd=end.value;
+    }else{
+      durationMinutes=elapsedMs/60000;
+      actualEnd=tv(finishTime);
+      end.value=actualEnd;
+    }
+
+    if(durationMinutes===null||durationMinutes<=0){
+      status.textContent='目前沒有可記錄的實際執行時間。';
+      return;
+    }
+
+    const now=new Date();
+    const arr=load();
+    arr.push({
+      id:Date.now(),
+      category:category.value.trim()||'未分類',
+      task:task.value.trim(),
+      duration:durationMinutes,
+      start:start.value||tv(started||now),
+      end:actualEnd,
+      date:now.toISOString()
+    });
+    save(arr);
+
+    const recordedTask=task.value.trim();
+    const recordedDuration=durationMinutes;
+    task.value='';
+    reset();
+    render();
+    status.textContent=`已記錄：${recordedTask}・實際執行 ${dur(recordedDuration)}`;
+  }
+
+  function render(){
+    let arr=load(),cur=arr.filter(r=>inWeek(r.date)),[s,e]=bounds(),ed=new Date(e);
+    ed.setDate(ed.getDate()-1);
+    weekRange.textContent=`${s.getMonth()+1}/${s.getDate()} ～ ${ed.getMonth()+1}/${ed.getDate()}`;
+    weekTotal.textContent=dur(cur.reduce((a,r)=>a+Number(r.duration||0),0));
+
+    let ct={};
+    cur.forEach(r=>ct[r.category]=(ct[r.category]||0)+Number(r.duration||0));
+    let entries=Object.entries(ct).sort((a,b)=>b[1]-a[1]);
+    bars.innerHTML=entries.length?'':'<div class="empty">還沒有紀錄。</div>';
+    let mx=Math.max(...entries.map(x=>x[1]),1);
+    entries.forEach(([n,m])=>{
+      bars.insertAdjacentHTML('beforeend',`<div class="barrow"><span>${esc(n)}</span><div class="track"><div class="fill" style="width:${Math.max(6,m/mx*100)}%"></div></div><strong>${dur(m)}</strong></div>`);
+    });
+
+    weekGrid.innerHTML='';
+    for(let i=0;i<7;i++){
+      let d=new Date(s);d.setDate(s.getDate()+i);
+      let total=cur.filter(r=>{
+        let x=new Date(r.date);
+        return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()&&x.getDate()===d.getDate();
+      }).reduce((a,r)=>a+Number(r.duration||0),0);
+      weekGrid.insertAdjacentHTML('beforeend',`<article class="day"><strong>週${['日','一','二','三','四','五','六'][d.getDay()]}</strong><div class="muted">${d.getMonth()+1}/${d.getDate()}</div><div class="daytime">${dur(total)}</div></article>`);
+    }
+
+    recordsBox.innerHTML='';
+    let sorted=cur.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    if(!sorted.length)recordsBox.innerHTML='<div class="empty">本週還沒有專注紀錄。</div>';
+    sorted.forEach(r=>recordsBox.insertAdjacentHTML('beforeend',`<div class="record"><span class="badge">${esc(r.category)}</span><div><div class="rtitle">${esc(r.task)}</div><div class="muted">${r.start} → ${r.end}</div></div><div>${dur(r.duration)}</div><button class="delete" data-id="${r.id}">刪除</button></div>`));
+    recordsBox.querySelectorAll('.delete').forEach(b=>b.addEventListener('click',()=>{
+      save(load().filter(r=>r.id!==Number(b.dataset.id)));
+      render();
+    }));
+  }
+
+  chips.forEach(c=>c.addEventListener('click',()=>{
+    if(running)return;
+    chips.forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    mins=Number(c.dataset.min)||25;
+    left=mins*60;
+    started=null;
+    segmentStartedAt=null;
+    elapsedMs=0;
+    start.value='';
+    end.value='';
+    draw();
+    status.textContent=`已設定 ${mins} 分鐘`;
+  }));
+
+  document.getElementById('startBtn').addEventListener('click',startTimer);
+  document.getElementById('pauseBtn').addEventListener('click',pause);
+  document.getElementById('finishBtn').addEventListener('click',finish);
+  document.getElementById('resetBtn').addEventListener('click',reset);
+
+  draw();
+  render();
+})();
+</script>
+</body>
+</html>

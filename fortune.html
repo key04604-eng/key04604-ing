@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>每日運勢占卜｜林鈺晴</title>
+  <meta name="description" content="選擇工作、戀愛、學業、健康或金錢面向，默想問題後抽一張今日籤運，獲得專屬運勢、生活推薦與心情小語。" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="canonical" href="https://key04604-eng.github.io/key04604-ing/fortune.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta property="og:site_name" content="林鈺晴｜個人工具" />
+  <meta property="og:title" content="每日運勢占卜｜今天想問哪一方面？" />
+  <meta property="og:description" content="選擇工作、戀愛、學業、健康或金錢，默想問題後抽出專屬今日籤運。" />
+  <meta property="og:url" content="https://key04604-eng.github.io/key04604-ing/fortune.html" />
+  <meta property="og:image" content="https://key04604-eng.github.io/key04604-ing/og.jpg" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRJ8DV18BV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DRJ8DV18BV');
+  </script>
+
+  <style>
+    :root {
+      --cream: #f4efe4;
+      --paper: #fbf7ee;
+      --ink: #2f2d2a;
+      --brick: #a86252;
+      --blue: #7c8f97;
+      --olive: #7f8665;
+      --note: #e4d3a1;
+      --line: rgba(47,45,42,.16);
+      --muted: rgba(47,45,42,.64);
+      --shadow: rgba(47,45,42,.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 10%, rgba(184,142,112,.09), transparent 25%),
+        radial-gradient(circle at 86% 18%, rgba(124,143,151,.10), transparent 24%),
+        var(--cream);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header { padding: 22px 0 8px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      font-weight: 800;
+      text-decoration: none;
+      border-bottom: 2px solid var(--ink);
+      letter-spacing: .04em;
+    }
+
+    .home-link {
+      text-decoration: none;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 9px 13px;
+      box-shadow: 3px 4px 0 var(--shadow);
+      font-weight: 700;
+    }
+
+    main { padding: 34px 0 60px; }
+
+    .hero {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto 30px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--note);
+      padding: 6px 11px;
+      font-size: .84rem;
+      font-weight: 800;
+      transform: rotate(-1deg);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.8rem, 7vw, 5.4rem);
+      line-height: .98;
+      letter-spacing: .02em;
+    }
+
+    .subtitle {
+      margin: 15px auto 0;
+      color: var(--muted);
+      max-width: 40rem;
+    }
+
+    .ask-panel {
+      max-width: 860px;
+      margin: 0 auto 24px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 22px;
+      box-shadow: 6px 8px 0 rgba(124,143,151,.10);
+    }
+
+    .ask-title {
+      font-weight: 900;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .aspect-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .aspect-btn {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      background: #fffdf7;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .aspect-btn.active {
+      background: var(--olive);
+      color: #fffaf2;
+      border-color: var(--olive);
+    }
+
+    .prompt {
+      text-align: center;
+      color: var(--muted);
+      margin: 0;
+      font-size: .95rem;
+    }
+
+    .prompt strong {
+      color: var(--ink);
+    }
+
+    .draw-area {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .fortune-box {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 8px 10px 0 var(--shadow);
+      padding: 30px 24px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 490px;
+      overflow: hidden;
+    }
+
+    .fortune-symbol {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--olive);
+      color: #fffaf2;
+      font-size: 4.5rem;
+      margin: 0 auto 18px;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fortune-symbol.spinning {
+      animation: fortuneSpin .28s linear infinite;
+    }
+
+    @keyframes fortuneSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.06); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .date-label {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 8px;
+    }
+
+    .aspect-label {
+      font-size: .82rem;
+      font-weight: 900;
+      color: var(--brick);
+      margin-bottom: 8px;
+      letter-spacing: .08em;
+    }
+
+    .fortune-level {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      margin: 0 0 8px;
+    }
+
+    .fortune-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .fortune-summary {
+      color: var(--muted);
+      max-width: 29rem;
+      margin: 0 auto 20px;
+    }
+
+    .draw-btn {
+      min-height: 48px;
+      border: 0;
+      background: var(--brick);
+      color: #fffaf2;
+      font: inherit;
+      font-weight: 900;
+      padding: 12px 20px;
+      cursor: pointer;
+      box-shadow: 4px 5px 0 #70463c;
+    }
+
+    .draw-btn:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .redraw-btn {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .rec-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 20px;
+      box-shadow: 5px 7px 0 rgba(124,143,151,.10);
+      min-width: 0;
+    }
+
+    .rec-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .rec-label {
+      font-size: .78rem;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .05em;
+      margin-bottom: 5px;
+    }
+
+    .rec-value {
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .rec-note {
+      font-size: .88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .quote-card {
+      grid-column: 1 / -1;
+      background: #e7dbb4;
+      border: 1px solid rgba(47,45,42,.10);
+      padding: 24px;
+    }
+
+    .quote-card .rec-value {
+      font-size: 1.25rem;
+      line-height: 1.7;
+    }
+
+    .share-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .ghost-btn {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 44px;
+      padding: 9px 14px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .notice {
+      max-width: 760px;
+      margin: 34px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    @media (max-width: 860px) {
+      .aspect-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .draw-area { grid-template-columns: 1fr; }
+      .fortune-box { min-height: 410px; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 20px, 1120px); }
+      .aspect-grid { grid-template-columns: 1fr; }
+      .recommendations { grid-template-columns: 1fr; }
+      .quote-card { grid-column: auto; }
+      .fortune-box { padding: 24px 18px; }
+      .fortune-symbol { width: 120px; height: 120px; font-size: 3.6rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fortune-symbol.spinning { animation: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html">林鈺晴</a>
+      <a class="home-link" href="index.html">← 回首頁</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">DAILY FORTUNE</div>
+      <h1>今日運勢占卜</h1>
+      <p class="subtitle">先選一個你今天最想問的面向，再默想問題，讓籤替你提供一點生活靈感。</p>
+    </section>
+
+    <section class="ask-panel">
+      <div class="ask-title">今天想求哪一方面的籤？</div>
+
+      <div class="aspect-grid" id="aspectGrid">
+        <button class="aspect-btn active" type="button" data-aspect="工作">工作</button>
+        <button class="aspect-btn" type="button" data-aspect="戀愛">戀愛</button>
+        <button class="aspect-btn" type="button" data-aspect="學業">學業</button>
+        <button class="aspect-btn" type="button" data-aspect="健康">健康</button>
+        <button class="aspect-btn" type="button" data-aspect="金錢">金錢</button>
+      </div>
+
+      <p class="prompt" id="promptText">
+        請先在心裡默想一個和 <strong>工作</strong> 有關的問題，例如：「我今天該先處理哪一件事？」
+      </p>
+    </section>
+
+    <section class="draw-area">
+      <div class="fortune-box">
+        <div>
+          <div class="fortune-symbol" id="fortuneSymbol">？</div>
+          <div class="date-label" id="dateLabel"></div>
+          <div class="aspect-label" id="aspectLabel">WORK</div>
+          <div class="fortune-level" id="fortuneLevel">今天的籤還沒打開</div>
+          <div class="fortune-title" id="fortuneTitle">默想好問題後，就可以開始抽籤</div>
+          <p class="fortune-summary" id="fortuneSummary">沒有科學根據，只有一點生活靈感。把它當作今天的小提示就好。</p>
+          <button class="draw-btn" id="drawBtn" type="button">開始抽籤</button>
+          <button class="redraw-btn" id="redrawBtn" type="button" hidden>同一面向再抽一次</button>
+        </div>
+      </div>
+
+      <div class="recommendations" id="recommendations" aria-live="polite">
+        <article class="rec-card">
+          <div class="rec-icon">🍜</div>
+          <div class="rec-label">今日餐點</div>
+          <div class="rec-value" id="foodValue">等待抽籤</div>
+          <p class="rec-note" id="foodNote">今天吃什麼，交給籤來決定一點點。</p>
+        </article>
+
+        <article class="rec-card">
+          <div class="rec-icon">📍</div>
+          <div class="rec-label">今日去處</div>
+          <div class="rec-value" id="placeValue">等待抽籤</div>
+          <p class="rec-note" id="placeNote">不一定要很遠，換個地方就可能換個心情。</p>
+        </article>
+
+        <article class="rec-card">
+          <div class="rec-icon">🎧</div>
+          <div class="rec-label">今日推薦歌曲</div>
+          <div class="rec-value" id="musicValue">等待抽籤</div>
+          <p class="rec-note" id="musicNote">用一種音樂氣氛陪今天走完。</p>
+        </article>
+
+        <article class="rec-card">
+          <div class="rec-icon">🧸</div>
+          <div class="rec-label">今日小物／行動</div>
+          <div class="rec-value" id="itemValue">等待抽籤</div>
+          <p class="rec-note" id="itemNote">有時候一個小東西或小動作，就能把一天拉回來。</p>
+        </article>
+
+        <article class="quote-card">
+          <div class="rec-label">給今天的心情小語</div>
+          <div class="rec-value" id="quoteValue">「先把問題放在心裡，答案不一定要立刻出現。」</div>
+        </article>
+      </div>
+    </section>
+
+    <div class="share-row">
+      <button class="ghost-btn" id="copyBtn" type="button">複製今日結果</button>
+      <button class="ghost-btn" id="shareBtn" type="button">分享今日運勢</button>
+    </div>
+
+    <div class="notice">
+      本工具為輕鬆娛樂用途，籤運與推薦皆為隨機生成，不代表實際預測、醫療、財務或其他專業建議。
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const STORAGE_PREFIX = 'ching-daily-fortune-v2-';
+
+      const aspectPrompts = {
+        工作: '請先在心裡默想一個和 工作 有關的問題，例如：「我今天該先處理哪一件事？」',
+        戀愛: '請先在心裡默想一個和 戀愛 有關的問題，例如：「我該更主動，還是先觀察？」',
+        學業: '請先在心裡默想一個和 學業 有關的問題，例如：「我現在最該補強哪一部分？」',
+        健康: '請先在心裡默想一個和 健康 有關的問題，例如：「今天我該怎麼照顧自己的狀態？」',
+        金錢: '請先在心裡默想一個和 金錢 有關的問題，例如：「今天適合花錢，還是先等等？」'
+      };
+
+      const aspectCodes = {
+        工作: 'WORK',
+        戀愛: 'LOVE',
+        學業: 'STUDY',
+        健康: 'HEALTH',
+        金錢: 'MONEY'
+      };
+
+      const fortunesByAspect = {
+        工作: [
+          { level: '大吉', symbol: '☀', title: '今天適合主動推進', summary: '工作運偏強。先處理最重要、最需要溝通的事情，主動比等待更容易得到回應。' },
+          { level: '中吉', symbol: '✦', title: '穩定累積會比硬衝有效', summary: '今天適合把任務切小、逐件完成。不要被「一次做到完美」拖慢進度。' },
+          { level: '小吉', symbol: '◡', title: '合作會比單打獨鬥順', summary: '遇到卡住的地方，可以直接詢問或討論。今天靠資訊交換，比自己悶著想更省力。' },
+          { level: '平', symbol: '○', title: '先整理優先順序', summary: '今天容易被零碎事情拉走注意力。先列三件最重要的事，再開始工作。' },
+          { level: '末吉', symbol: '△', title: '不要急著答應所有事情', summary: '工作量可能比想像中多。今天適合先確認範圍、時程與責任，再說可以。' },
+          { level: '轉運籤', symbol: '↻', title: '換一種做法，工作會開始轉動', summary: '今天如果卡住，不一定是你不夠努力，可能只是方法不適合。換順序、換工具、換個人討論，反而更容易打開局面。' }
+        ],
+        戀愛: [
+          { level: '大吉', symbol: '♡', title: '今天適合把真實感受說出來', summary: '戀愛運偏亮。比起猜測對方，真誠而不施壓的表達更容易拉近距離。' },
+          { level: '中吉', symbol: '✦', title: '互動裡有舒服的空間', summary: '今天適合自然相處，不用刻意製造話題。留一點空白，反而更容易感覺到彼此。' },
+          { level: '小吉', symbol: '◡', title: '先觀察對方的回應', summary: '今天不用急著定義關係。看對方是否穩定回應你的靠近，比一句承諾更有參考價值。' },
+          { level: '平', symbol: '○', title: '把注意力拉回自己', summary: '如果今天特別容易在意對方反應，先做一件讓自己舒服的事，不要把全部情緒都綁在訊息上。' },
+          { level: '末吉', symbol: '△', title: '避免在情緒高點做決定', summary: '今天容易因為一句話想很多。重要的關係問題，等情緒稍微降下來再談會更清楚。' },
+          { level: '轉運籤', symbol: '↻', title: '關係的轉機來自換個角度', summary: '今天不要只盯著對方有沒有照你期待的方式回應。換個角度看互動，也許會發現其實有些訊號一直都在。' }
+        ],
+        學業: [
+          { level: '大吉', symbol: '✎', title: '今天很適合進入深度學習', summary: '專注力不錯。挑一個最核心的題目連續處理一段時間，比一直切換科目更有效。' },
+          { level: '中吉', symbol: '✦', title: '整理比新增更多內容重要', summary: '今天適合整理筆記、統整文獻或重整架構，會比一直找新資料更有收穫。' },
+          { level: '小吉', symbol: '◡', title: '先完成，再修漂亮', summary: '今天可以先做出一版可用成果，不要被格式、排版或細節卡太久。' },
+          { level: '平', symbol: '○', title: '讀不進去就換一種方式', summary: '今天如果一直分心，可以改成手寫、口述、畫圖或做題，換一種輸入方式可能會比較順。' },
+          { level: '末吉', symbol: '△', title: '不要拿今天的狀態否定能力', summary: '今天可能比較累或卡。先做最小單位的進度，休息後再回來，不要把一時卡住解讀成不會。' },
+          { level: '轉運籤', symbol: '↻', title: '換一種學習方式，會突然通很多', summary: '如果一直看不懂，就別再只盯著同一頁。改成畫圖、口述、做題或請人解釋，今天的突破可能來自換方法。' }
+        ],
+        健康: [
+          { level: '大吉', symbol: '☘', title: '今天適合把身體照顧好一點', summary: '今天的健康籤偏正向。規律吃飯、喝水、走動，會讓整體狀態更穩。' },
+          { level: '中吉', symbol: '✦', title: '適合溫和活動，不必勉強', summary: '今天可以散步、伸展或做輕量運動。重點是讓身體動起來，不是逼自己破紀錄。' },
+          { level: '小吉', symbol: '◡', title: '今天適合提早休息', summary: '精神可能還撐得住，但身體需要補電。晚上少做一點，明天通常更划算。' },
+          { level: '平', symbol: '○', title: '留意累積的小訊號', summary: '肩頸緊、眼睛酸、睡不好這些小訊號不要一直忽略。今天適合安排幾次真正的休息。' },
+          { level: '末吉', symbol: '△', title: '今天不要硬撐', summary: '如果身體明顯不舒服，先休息並視情況尋求專業協助。這張籤不是叫你撐住，是叫你停一下。' },
+          { level: '轉運籤', symbol: '↻', title: '先調整生活節奏，身體會慢慢回來', summary: '今天的轉運不是靠意志力，而是靠睡眠、補水、吃飯和活動量。先改一個最容易做到的小習慣就好。' }
+        ],
+        金錢: [
+          { level: '大吉', symbol: '◎', title: '今天適合做有計畫的消費', summary: '金錢運不錯。若本來就有預算與需求，今天可以放心做合理決定，不必因為焦慮一直拖。' },
+          { level: '中吉', symbol: '✦', title: '先比較，再下單', summary: '今天適合把價格、品質與使用頻率一起看。不是最便宜就最好，也不是最貴就最值得。' },
+          { level: '小吉', symbol: '◡', title: '小額花費可以，大額先等等', summary: '今天適合滿足一些小需求，但較大的支出建議先睡一晚再決定。' },
+          { level: '平', symbol: '○', title: '先看帳戶，再看購物車', summary: '今天適合先確認這週已經花多少，再決定還能不能買。數字會比感覺誠實。' },
+          { level: '末吉', symbol: '△', title: '小心「現在不買就虧」', summary: '今天容易被限時、折扣或稀缺感推著走。真正需要的東西，通常明天還是需要。' },
+          { level: '轉運籤', symbol: '↻', title: '整理金流，就是今天的轉運', summary: '不一定要立刻多賺一筆。先取消一個沒在用的訂閱、整理帳單或檢查支出，今天的財運可能從看清楚開始。' }
+        ]
+      };
+
+      const foods = [
+        ['熱湯麵', '適合吃一點暖暖的東西，把節奏慢下來。'],
+        ['咖哩飯', '今天需要一點有存在感的味道，吃飽再處理麻煩事。'],
+        ['飯糰＋豆漿', '簡單、穩定、方便，適合今天不要想太多。'],
+        ['火鍋', '今天適合熱鬧一點，找人一起吃會更加分。'],
+        ['水果優格', '想讓身體輕一點的日子，吃得清爽也不錯。'],
+        ['鹽酥雞', '今天可以給自己一個小放縱，但記得配點水。'],
+        ['壽司', '適合選很多小份量，把想吃的都試一點。'],
+        ['早午餐', '今天的節奏可以慢一點，找間舒服的店坐一下。']
+      ];
+
+      const places = [
+        ['附近公園', '走個 15 分鐘，不帶目的也沒關係。'],
+        ['書店', '讓注意力暫時離開螢幕，看看不是演算法推給你的東西。'],
+        ['咖啡店', '換個環境做事，可能比硬待在原位有效。'],
+        ['河濱／步道', '今天適合讓身體動一點，腦袋也會比較鬆。'],
+        ['美術館／展覽', '今天適合看點新的視覺刺激。'],
+        ['圖書館', '需要安靜時，找一個不必消費也能待著的地方。'],
+        ['家附近沒走過的巷子', '不用遠行，改一條路就有一點冒險感。']
+      ];
+
+      const musicByAspect = {
+        工作: [
+          ['Stray Kids — MIROH', '今天需要一點往前衝的氣勢，適合在開始重要任務前播放。'],
+          ['LE SSERAFIM — ANTIFRAGILE', '遇到卡關時，提醒自己調整方式，不用因為一次不順就停下來。'],
+          ['DAY6 — Time of Our Life', '適合把工作節奏拉亮一點，尤其是下午開始有點沒電的時候。'],
+          ['NewJeans — Super Shy', '適合處理比較輕量、重複性的工作，讓節奏不要太沉。'],
+          ['Nujabes — Feather', '需要專注但又不想被歌詞塞滿腦袋時，很適合作為工作背景。']
+        ],
+        戀愛: [
+          ['NewJeans — Ditto', '適合今天有點想念某個人、但又不想把情緒說得太滿的時候。'],
+          ['IU — Blueming', '今天如果想讓戀愛心情亮一點，這首很適合當成小小的好兆頭。'],
+          ['Lauv — I Like Me Better', '提醒自己，喜歡一個人的同時，也不要弄丟原本舒服的自己。'],
+          ['wave to earth — seasons', '適合比較安靜、曖昧或想慢慢感受關係的今天。'],
+          ['AKMU — Love Lee', '如果今天的戀愛運比較輕鬆，就讓喜歡這件事單純可愛一點。']
+        ],
+        學業: [
+          ['Joe Hisaishi — One Summer’s Day', '適合閱讀、寫作或整理資料，讓注意力慢慢沉下來。'],
+          ['Nujabes — Aruarian Dance', '需要長時間專注時，可以當成不太搶注意力的背景音樂。'],
+          ['RADWIMPS — Sparkle', '今天如果讀到有點疲乏，適合用一首有推進感的歌重新啟動。'],
+          ['BTS — Yet To Come', '進度不如預期時，提醒自己現在只是過程，不是最後結果。'],
+          ['Stray Kids — Blueprint', '很適合正在規劃、做報告或想把混亂內容整理成方向的今天。']
+        ],
+        健康: [
+          ['IU — Through the Night', '今天適合把節奏放慢一點，尤其是需要休息或準備睡覺的時候。'],
+          ['HONNE — Warm on a Cold Night', '想讓情緒和身體都鬆一點時，可以用這首當作休息的背景。'],
+          ['wave to earth — bad', '適合一個人走走、放空，把注意力從事情拉回自己。'],
+          ['Coldplay — Strawberry Swing', '如果今天想散步或曬一點太陽，這首很適合陪你慢慢走。'],
+          ['Norah Jones — Sunrise', '適合早上或休息日播放，不需要急著進入高刺激模式。']
+        ],
+        金錢: [
+          ['SEVENTEEN — _WORLD', '今天適合用輕快的心情做決定，不要讓金錢焦慮把一天弄得太重。'],
+          ['BTS — Life Goes On', '提醒自己財務狀態是長期累積，不需要因為一天的支出過度責怪自己。'],
+          ['DAY6 — HAPPY', '如果今天決定不買某個東西，也可以把省下來的錢當成送給未來自己的小禮物。'],
+          ['AKMU — Give Love', '適合提醒自己，能帶來滿足感的不一定都是新的物品。'],
+          ['Jack Johnson — Better Together', '今天若有聚會或約會，比起花大錢，舒服地一起度過時間可能更值得。']
+        ]
+      };
+
+      const items = [
+        ['帶一隻喜歡的娃娃出門', '不需要有功能，它負責可愛就好。'],
+        ['換一個吊飾', '今天的小變化，可以從包包或鑰匙開始。'],
+        ['整理桌面 10 分鐘', '只整理看得到的地方，不要一不小心變成年末大掃除。'],
+        ['換手機桌布', '給每天都會看到的畫面換一點新鮮感。'],
+        ['帶一本小筆記本', '今天想到的東西先寫下來，不用立刻變成成果。'],
+        ['整理包包', '把過期發票、空包裝和不知道哪來的紙拿掉。'],
+        ['刪掉 20 張沒用的截圖', '小型數位斷捨離，也算整理生活。']
+      ];
+
+      const quotesByAspect = {
+        工作: [
+          '「先把最重要的事情完成，再去處理那些看起來很急的事情。」',
+          '「今天可以把界線說清楚，這不叫難搞，叫減少誤會。」',
+          '「進度不一定要漂亮，但要能往前。」'
+        ],
+        戀愛: [
+          '「喜歡一個人，不代表要把自己的節奏交出去。」',
+          '「關係裡真正重要的不是猜中，而是能不能安心地問。」',
+          '「先確認你想要的是靠近，還是只是想得到一個答案。」'
+        ],
+        學業: [
+          '「讀不進去的時候，不代表你不會，只代表現在需要換一種方式。」',
+          '「今天先完成一小段，累積起來也會變成很遠的距離。」',
+          '「你不是每次都要理解全部，先抓住核心就夠了。」'
+        ],
+        健康: [
+          '「休息不是偷懶，是讓身體有機會把你帶到明天。」',
+          '「今天的你不用撐到極限，舒服一點也算進度。」',
+          '「身體發出的訊號，不需要等到很大聲才值得被聽見。」'
+        ],
+        金錢: [
+          '「真正適合你的消費，不需要靠倒數計時催你決定。」',
+          '「先問自己會不會常用，再問它有沒有打折。」',
+          '「存錢不是什麼都不能買，而是知道什麼值得買。」'
+        ]
+      };
+
+      const aspectGrid = document.getElementById('aspectGrid');
+      const aspectButtons = [...aspectGrid.querySelectorAll('.aspect-btn')];
+      const promptText = document.getElementById('promptText');
+      const aspectLabel = document.getElementById('aspectLabel');
+
+      const dateLabel = document.getElementById('dateLabel');
+      const fortuneSymbol = document.getElementById('fortuneSymbol');
+      const fortuneLevel = document.getElementById('fortuneLevel');
+      const fortuneTitle = document.getElementById('fortuneTitle');
+      const fortuneSummary = document.getElementById('fortuneSummary');
+
+      const foodValue = document.getElementById('foodValue');
+      const foodNote = document.getElementById('foodNote');
+      const placeValue = document.getElementById('placeValue');
+      const placeNote = document.getElementById('placeNote');
+      const musicValue = document.getElementById('musicValue');
+      const musicNote = document.getElementById('musicNote');
+      const itemValue = document.getElementById('itemValue');
+      const itemNote = document.getElementById('itemNote');
+      const quoteValue = document.getElementById('quoteValue');
+
+      const drawBtn = document.getElementById('drawBtn');
+      const redrawBtn = document.getElementById('redrawBtn');
+      const copyBtn = document.getElementById('copyBtn');
+      const shareBtn = document.getElementById('shareBtn');
+
+      let selectedAspect = '工作';
+      let currentResult = null;
+      let rollingTimer = null;
+      let rollingStopTimer = null;
+      let isRolling = false;
+
+      function todayKey() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+      }
+
+      function storageKey() {
+        return STORAGE_PREFIX + todayKey() + '-' + selectedAspect;
+      }
+
+      function formatToday() {
+        return new Intl.DateTimeFormat('zh-TW', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          weekday: 'long'
+        }).format(new Date());
+      }
+
+      function pick(list) {
+        return list[Math.floor(Math.random() * list.length)];
+      }
+
+      function makeResult() {
+        return {
+          aspect: selectedAspect,
+          fortune: pick(fortunesByAspect[selectedAspect]),
+          food: pick(foods),
+          place: pick(places),
+          music: pick(musicByAspect[selectedAspect]),
+          item: pick(items),
+          quote: pick(quotesByAspect[selectedAspect]),
+          createdAt: new Date().toISOString()
+        };
+      }
+
+      function resetDisplayForAspect() {
+        currentResult = null;
+        fortuneSymbol.textContent = '？';
+        fortuneSymbol.classList.remove('spinning');
+        fortuneLevel.textContent = '今天的籤還沒打開';
+        fortuneTitle.textContent = '默想好問題後，就可以開始抽籤';
+        fortuneSummary.textContent = '沒有科學根據，只有一點生活靈感。把它當作今天的小提示就好。';
+        foodValue.textContent = '等待抽籤';
+        foodNote.textContent = '今天吃什麼，交給籤來決定一點點。';
+        placeValue.textContent = '等待抽籤';
+        placeNote.textContent = '不一定要很遠，換個地方就可能換個心情。';
+        musicValue.textContent = '等待抽籤';
+        musicNote.textContent = '用一種音樂氣氛陪今天走完。';
+        itemValue.textContent = '等待抽籤';
+        itemNote.textContent = '有時候一個小東西或小動作，就能把一天拉回來。';
+        quoteValue.textContent = '「先把問題放在心裡，答案不一定要立刻出現。」';
+
+        drawBtn.disabled = false;
+        drawBtn.textContent = '開始抽籤';
+        redrawBtn.hidden = true;
+      }
+
+      function render(result) {
+        currentResult = result;
+
+        fortuneSymbol.textContent = result.fortune.symbol;
+        fortuneLevel.textContent = result.fortune.level;
+        fortuneTitle.textContent = result.fortune.title;
+        fortuneSummary.textContent = result.fortune.summary;
+
+        foodValue.textContent = result.food[0];
+        foodNote.textContent = result.food[1];
+        placeValue.textContent = result.place[0];
+        placeNote.textContent = result.place[1];
+        musicValue.textContent = result.music[0];
+        musicNote.textContent = result.music[1];
+        itemValue.textContent = result.item[0];
+        itemNote.textContent = result.item[1];
+        quoteValue.textContent = result.quote;
+
+        drawBtn.textContent = '今日運勢已抽出';
+        drawBtn.disabled = true;
+        redrawBtn.hidden = false;
+      }
+
+      function updateAspect(aspect) {
+        if (isRolling) return;
+
+        selectedAspect = aspect;
+        aspectButtons.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.aspect === aspect);
+        });
+
+        aspectLabel.textContent = aspectCodes[aspect];
+        promptText.innerHTML = aspectPrompts[aspect].replace(
+          aspect,
+          `<strong>${aspect}</strong>`
+        );
+
+        resetDisplayForAspect();
+        loadTodayForAspect();
+      }
+
+      function startRolling(forceNew = false) {
+        if (isRolling) return;
+
+        isRolling = true;
+        drawBtn.disabled = true;
+        redrawBtn.hidden = true;
+        fortuneSymbol.classList.add('spinning');
+        fortuneTitle.textContent = `正在替你抽 ${selectedAspect} 籤…`;
+        fortuneSummary.textContent = '先把剛剛默想的問題留在心裡，等輪轉停下來。';
+
+        const levels = ['大吉', '中吉', '小吉', '平', '末吉', '轉運籤'];
+        const symbols = fortunesByAspect[selectedAspect].map(f => f.symbol);
+
+        let i = 0;
+        rollingTimer = setInterval(() => {
+          fortuneLevel.textContent = levels[i % levels.length];
+          fortuneSymbol.textContent = symbols[i % symbols.length];
+          i += 1;
+        }, 90);
+
+        rollingStopTimer = setTimeout(() => {
+          clearInterval(rollingTimer);
+          rollingTimer = null;
+          rollingStopTimer = null;
+          fortuneSymbol.classList.remove('spinning');
+
+          const result = makeResult();
+          localStorage.setItem(storageKey(), JSON.stringify(result));
+          render(result);
+
+          isRolling = false;
+        }, 1600);
+      }
+
+      function loadTodayForAspect() {
+        const raw = localStorage.getItem(storageKey());
+        if (!raw) return;
+
+        try {
+          render(JSON.parse(raw));
+        } catch {
+          localStorage.removeItem(storageKey());
+        }
+      }
+
+      function resultText() {
+        if (!currentResult) return '我還沒抽今日運勢。';
+
+        return [
+          `今日${currentResult.aspect}運勢：${currentResult.fortune.level}`,
+          `${currentResult.fortune.title}`,
+          `${currentResult.fortune.summary}`,
+          `🍜 餐點：${currentResult.food[0]}`,
+          `📍 去處：${currentResult.place[0]}`,
+          `🎧 今日推薦歌曲：${currentResult.music[0]}`,
+          `🧸 小物／行動：${currentResult.item[0]}`,
+          `💬 ${currentResult.quote}`,
+          '',
+          '每日運勢占卜：',
+          'https://key04604-eng.github.io/key04604-ing/fortune.html'
+        ].join('\n');
+      }
+
+      async function copyResult() {
+        const text = resultText();
+        try {
+          await navigator.clipboard.writeText(text);
+          copyBtn.textContent = '已複製 ✓';
+          setTimeout(() => copyBtn.textContent = '複製今日結果', 1600);
+        } catch {
+          window.prompt('請複製以下內容：', text);
+        }
+      }
+
+      async function shareResult() {
+        const text = resultText();
+
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: `我的今日${selectedAspect}運勢`,
+              text,
+              url: 'https://key04604-eng.github.io/key04604-ing/fortune.html'
+            });
+            return;
+          } catch {}
+        }
+
+        copyResult();
+      }
+
+      aspectButtons.forEach(btn => {
+        btn.addEventListener('click', () => updateAspect(btn.dataset.aspect));
+      });
+
+      drawBtn.addEventListener('click', () => startRolling(false));
+      redrawBtn.addEventListener('click', () => startRolling(true));
+      copyBtn.addEventListener('click', copyResult);
+      shareBtn.addEventListener('click', shareResult);
+
+      dateLabel.textContent = formatToday();
+      updateAspect('工作');
+    })();
+  </script>
+</body>
+</html>
